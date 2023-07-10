@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv= "x-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/styled.css">
+    <style>
+      
+      .navbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .menu-icon {
+        display: none;
+        flex-direction: column;
+        cursor: pointer;
+      }
+
+      .menu-icon__line {
+        width: 25px;
+        height: 3px;
+        background-color: black;
+        margin-bottom: 5px;
+      }
+
+      .menu {
+        display: flex;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+
+      .menu li {
+        margin-left: 20px;
+      }
+
+      .menu a {
+        color: black;
+        text-decoration: none;
+        transition: color 0.3s;
+      }
+
+      .menu a:hover {
+        color: #ffbf00;
+      }
+
+      @media (max-width: 768px) {
+        .menu-icon {
+          display: flex;
+        }
+
+        .menu {
+          display: none;
+          flex-direction: column;
+          align-items: center;
+        }
+
+        .menu.active {
+          display: flex;
+        }
+      }
+    </style>
+    <title>Projectfinal2</title>
+</head>
+<body>
+  
+    <header class="header">
+        <div class="logo">
+            <a href="#inicio"><img src="./ucvimg.png" alt="logo"></a>   
+        </div>
+        <nav>
+            <ul class="nav-links">
+                <div class="navbar">
+                  <div class="menu-icon" onclick="toggleMenu()" id="menu-icon">
+                    <div class="menu-icon__line"></div>
+                    <div class="menu-icon__line"></div>
+                    <div class="menu-icon__line"></div>
+                  </div>
+                  <ul class="menu" id="menu">
+                    <li><a href="#inicio">Inicio</a></li>
+                    <li><a href="#contacto">Contacto</a></li>
+                  </ul>
+                </div>
+            </ul>
+        </nav>
+    </header>  
+
+    <main>
+      <section id="inicio">
+        <div class="carousel">
+          <img class="slide" src="./fotopro2.png" alt="fotopro2" />
+          <img class="slide" src="./foto32.jpg" alt="foto32" />
+          <img class="slide" src="./fotopro3.jpg" alt="fotopro3" />
+        </div>
+        <h1 class="title">Hola, te invito a conocerme</h1>
+        <article class="primero">
+          <p class="primero">
+            <a href="traudy vargas.jpg" target="_blank">
+              <button>Cargar CV</button>
+            </a>
+                </p>
+                <p>Soy antropóloga social 🤓, dedicada a la gestión de proyectos, con capacidad para pensar estratégicamente, ejecutar con eficacia y entregar un trabajo de alta calidad. Fotógrafa y filósofa amateur, que le gustan las películas de terror 👻 y comer en un lindo lugar. Amante de los viajes 🛬 repentinos, aprendiendo a comer sano y reconstruyéndome. Soy venezolana, tengo un buen sentido del humor 😉. Y hasta hace muy poco pensé que no sabía que podría aprender algo de programación 🖥️. Mis objetivos son: Aportar conocimiento a los proyectos empresariales. Interactuar y establecer oportunidades de mejora y crecimiento para la empresa. Brindar asesoría de manera responsable y altamente receptiva. Especialidades: Formación de recursos humanos. Etnógrafa digital. Project Manager Digital.
+                </p>
+            </article> 
+        </section>
+
+        <section id="contacto">
+            <article>
+                <h3 class="title-se">Conóceme</h3>
+                <p class="segundo">
+                  <br>
+                  <h2>Skill</h2>
+                  <ul>
+                    <li>Comunicación</li>
+                    <li>Compromiso</li>
+                    <li>Responsable</li>
+                  </ul> 
+                  <br>
+                  <h2>Hobbies</h2>
+                  <ol>
+                    <li>Aprender cosas nuevas</li>
+                    <li>Ver películas de terror</li>
+                    <li>Hacer recetas</li>
+                  </ol>
+                </p>
+            </article>
+            <ul class="contactos">
+              <li class="list">
+                <a href="mailto:traudyjose@gmail.com"><img src="./logo2.jpeg" alt="enviar correo"></a>
+              </li>
+              <li class="list">
+                <a href="https://github.com/traudyjose"><img src="./logogit.jpeg" alt="repo github"></a>
+              </li>
+              <li class="list">
+                <a href="https://www.linkedin.com/in/traudyvargas"><img src="./logo1.jpeg" alt="linkedin"></a>
+              </li>
+            </ul>
+        </section>
+    </main>
+
+    <footer>
+      <h3>Codigo Latam</h3>
+    </footer>
+
+    <script>
+      function toggleMenu() {
+        const menu = document.getElementById('menu');
+        menu.classList.toggle('active');
+      }
+  const carousel = document.querySelector('.carousel');
+  const slides = carousel.querySelectorAll('.slide');
+
+  let isDragging = false;
+  let startPos = 0;
+  let currentTranslate = 0;
+  let prevTranslate = 0;
+  let animationID = 0;
+  let currentIndex = 0;
+
+  slides.forEach((slide, index) => {
+    const slideImage = slide.querySelector('img');
+    slideImage.addEventListener('dragstart', (e) => e.preventDefault());
+
+    // Touch events
+    slide.addEventListener('touchstart', touchStart(index));
+    slide.addEventListener('touchend', touchEnd);
+    slide.addEventListener('touchmove', touchMove);
+
+    // Mouse events
+    slide.addEventListener('mousedown', touchStart(index));
+    slide.addEventListener('mouseup', touchEnd);
+    slide.addEventListener('mouseleave', touchEnd);
+    slide.addEventListener('mousemove', touchMove);
+  });
+
+  // Disable context menu on the carousel
+  window.oncontextmenu = function (event) {
+    event.preventDefault();
+    event.stopPropagation();
+    return false;
+  };
+
+  function touchStart(index) {
+    return function (event) {
+      currentIndex = index;
+      startPos = getPositionX(event);
+      isDragging = true;
+
+      animationID = requestAnimationFrame(animation);
+      carousel.classList.add('grabbing');
+    };
+  }
+
+  function touchEnd() {
+    isDragging = false;
+    cancelAnimationFrame(animationID);
+
+    const movedBy = currentTranslate - prevTranslate;
+
+    if (movedBy < -100 && currentIndex < slides.length - 1) {
+      currentIndex += 1;
+    }
+
+    if (movedBy > 100 && currentIndex > 0) {
+      currentIndex -= 1;
+    }
+
+    setPositionByIndex();
+
+    carousel.classList.remove('grabbing');
+  }
+
+  function touchMove(event) {
+    if (isDragging) {
+      const currentPosition = getPositionX(event);
+      currentTranslate = prevTranslate + currentPosition - startPos;
+    }
+  }
+
+  function getPositionX(event) {
+    return event.type.includes('mouse') ? event.pageX : event.touches[0].clientX;
+  }
+
+  function animation() {
+    setSliderPosition();
+    if (isDragging) requestAnimationFrame(animation);
+  }
+
+  function setSliderPosition() {
+    carousel.style.transform = `translateX(${currentTranslate}px)`;
+  }
+
+  function setPositionByIndex() {
+    currentTranslate = currentIndex * -carousel.offsetWidth;
+    prevTranslate = currentTranslate;
+    setSliderPosition();
+  }
+    </script>
+</body>
+</html>
